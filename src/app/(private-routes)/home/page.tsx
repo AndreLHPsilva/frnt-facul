@@ -25,7 +25,7 @@ export default function Home() {
 
   async function handleGenerateDiet() {
     const headers = {
-      Authorization: `Bearer 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`,
+      Authorization: `Bearer ${process.env.NEXT_PUBLIC_SECRET_OPENIA}`,
       "Content-Type": "application/json",
     };
 
