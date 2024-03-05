@@ -24,7 +24,7 @@ export default function ContainerFormsComponent() {
         />
       )}
 
-      {!isLoginActive && <FormSignupComponent />}
+      {!isLoginActive && <FormSignupComponent setIsLoginActive={setIsLoginActive}/>}
       {!isLoginActive && (
         <InfoBelowFormComponent
           text="Você já tem uma conta ?"

@@ -11,17 +11,18 @@ const nextAuthOptions: NextAuthOptions = {
         password: { label: "password", type: "password" },
       },
       async authorize(credentials, req) {
-        const response = await fetch("http://localhost:3001/users/signin", {
+        const response = await fetch(`${process.env.API_URL}/users/signin`, {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({ email: credentials?.email, password: credentials?.password }),
         });
 
+        const user = await response.json();
+
         if (!response.ok) {
-          return null;
+          throw new Error(user.message);
         }
 
-        const user = await response.json();
         return user;
       },
     }),

@@ -6,6 +6,7 @@ import { TypeLoginDataProps, loginFormSchema } from "@/types/LoginTypes";
 import { useState } from "react";
 import { Eye, EyeOff } from "lucide-react";
 import { signIn } from "next-auth/react";
+import { toast } from "react-toastify";
 
 export default function FormSigninComponent() {
   const {
@@ -22,7 +23,7 @@ export default function FormSigninComponent() {
     const result = await signIn("credentials", { ...data, redirect: false });
 
     if (result?.error) {
-      return;
+      return toast(result?.error, { type: 'error' });
     }
 
     window.location.replace('/home')

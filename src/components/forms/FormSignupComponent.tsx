@@ -5,8 +5,9 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import React, { ReactNode, useState } from "react";
 import { Eye, EyeOff } from "lucide-react";
 import { TypeSignupDataProps, signupFormSchema } from "@/types/SignupTypes";
+import { toast } from "react-toastify";
 
-export default function FormSignupComponent() {
+export default function FormSignupComponent({setIsLoginActive}: {setIsLoginActive: (value: any) => void}) {
   const {
     register,
     handleSubmit,
@@ -19,23 +20,26 @@ export default function FormSignupComponent() {
 
   async function HandleLogin(data: TypeSignupDataProps) {
     try {
-      const resp = await fetch("http://localhost:3001/users/", {
+      const resp = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/users/`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({...data}),
+        body: JSON.stringify({ ...data }),
       });
 
-      const body = await resp.json()
-
-      if(!resp.ok){
-        throw new Error(body.message)
-      }
+      const body = await resp.json();
 
       console.log(body)
+
+      if (!resp.ok) {
+        throw new Error(body.message);
+      }
+
+      toast('Cadastro realizado com sucesso!', { type: "success" });
+      toast.onChange( change => change.status == 'removed' && setIsLoginActive(true))
     } catch (error) {
-      console.log('err', error)
+      toast('Erro ao realizar cadastro', { type: "error" });
     }
   }
 
@@ -77,7 +81,7 @@ export default function FormSignupComponent() {
           <div className="relative">
             <input
               {...register("password")}
-              type={isVisiblePassword ? "password" : "text"}
+              type={isVisiblePassword ? "text" : "password"}
               id="password"
               className="w-full border border-zinc-200 rounded py-1.5 pl-2 pr-8 outline-none focus:shadow focus:shadow-zinc-200 focus:border-cyan-300 transition-all"
             />
